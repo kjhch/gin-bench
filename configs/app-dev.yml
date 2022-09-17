@@ -1,0 +1,41 @@
+app:
+  name: gin-bench
+  author: kejun
+  since: 2022-08-17
+
+server:
+  http:
+    addr: :9000
+
+logger:
+  default:
+    level: debug
+    encoding: console
+    outputs:
+      - file: stdout
+      - file: ../../logs/app.log
+        maxSize: 100
+        maxAge: 30
+        maxBackups: 10
+  metrics:
+    level: info
+    encoding: json
+    outputs:
+      - file: stdout
+      - file: ../../logs/metrics.log
+        maxSize: 100
+        maxAge: 30
+        maxBackups: 10
+
+datasource:
+  mysql:
+    user: root
+    password: 1234
+    addr: localhost:3306
+    dbName: test
+    maxOpenConnNum: 200
+  redis:
+    addr: localhost:6379
+    password: 1234
+    poolSize: 200
+
