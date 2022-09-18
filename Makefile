@@ -7,7 +7,7 @@ all: generate build
 .PHONY: generate
 # generate
 generate:
-	go generate ./...
+	go generate cmd/gin-bench/generate.go
 
 .PHONY: build
 # build
