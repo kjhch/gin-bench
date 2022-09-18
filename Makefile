@@ -2,12 +2,12 @@ GOPATH = $(shell go env GOPATH)
 
 .PHONY: all
 # all(clean generate build)
-all: echo
+all: clean generate build
 
-.PHONY: echo
-# echo
-echo:
-	echo "test">test.txt
+#.PHONY: echo
+## echo
+#echo:
+#	echo "test">test.txt
 
 .PHONY: generate
 # generate

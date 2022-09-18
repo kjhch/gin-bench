@@ -1,4 +1,4 @@
-FROM golang:1.18-alpine AS builder
+FROM golang:1.18 AS builder
 
 WORKDIR /home/admin
 
@@ -6,10 +6,7 @@ ENV GOPROXY=https://goproxy.io,direct
 
 COPY . .
 
-RUN echo -e http://mirrors.ustc.edu.cn/alpine/v3.13/main/ > /etc/apk/repositories && \
-    apk add make && \
-    chmod a+rw -R . && \
-    make all
+RUN make all
 
 # FROM 基于 alpine:latest
 FROM alpine:latest
