@@ -8,6 +8,7 @@ COPY . .
 
 RUN echo -e http://mirrors.ustc.edu.cn/alpine/v3.13/main/ > /etc/apk/repositories && \
     apk add make && \
+    chmod a+rw -R . && \
     make all
 
 # FROM 基于 alpine:latest

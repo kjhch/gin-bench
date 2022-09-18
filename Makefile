@@ -7,7 +7,7 @@ all: generate build
 .PHONY: generate
 # generate
 generate:
-	ls -al && go generate ./...
+	go generate ./...
 
 .PHONY: build
 # build
