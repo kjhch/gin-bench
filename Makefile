@@ -2,7 +2,7 @@ GOPATH = $(shell go env GOPATH)
 
 .PHONY: all
 # all(clean generate build)
-all: clean generate build 
+all: generate build
 
 .PHONY: generate
 # generate
