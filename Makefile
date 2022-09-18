@@ -2,12 +2,17 @@ GOPATH = $(shell go env GOPATH)
 
 .PHONY: all
 # all(clean generate build)
-all: generate build
+all: echo
+
+.PHONY: echo
+# echo
+echo:
+	echo "test">test.txt
 
 .PHONY: generate
 # generate
 generate:
-	go generate cmd/gin-bench/generate.go
+	go generate ./...
 
 .PHONY: build
 # build
