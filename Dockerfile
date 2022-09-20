@@ -1,4 +1,4 @@
-FROM golang:1.18-alpine3.14 AS builder
+FROM golang:1.18 AS builder
 
 WORKDIR /home/admin
 
@@ -6,19 +6,19 @@ ENV GOPROXY=https://goproxy.io,direct
 
 COPY . .
 
-RUN apk add make && make all
+RUN make all
 
-# FROM 基于 alpine:latest
-FROM alpine:latest
+# FROM 基础镜像
+FROM centos:7
 
 # RUN 设置 Asia/Shanghai 时区
-RUN echo -e http://mirrors.ustc.edu.cn/alpine/v3.13/main/ > /etc/apk/repositories && \
-    apk --no-cache add tzdata  && \
-    ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo "Asia/Shanghai" > /etc/timezone && \
-    adduser -D admin
+    yum install -y net-tools && \
+    adduser -m admin
 
-ENV APP_ENV=test
+ARG APP_ENV
+ENV APP_ENV=${APP_ENV:-prod}
 
 USER admin
 
@@ -26,6 +26,6 @@ WORKDIR /home/admin
 
 # COPY 源路径 目标路径 从镜像中 COPY
 COPY --from=builder /home/admin/bin/* /bin/
-COPY --from=builder /home/admin/configs/ .
+COPY --from=builder /home/admin/configs/ ./configs
 
 CMD ["gin-bench"]
