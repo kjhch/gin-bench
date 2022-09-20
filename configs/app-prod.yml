@@ -32,7 +32,7 @@ datasource:
     user: root
     password: 1234
     addr: mysql.share:3306
-    dbName: benchmark
+    dbName: test
     maxOpenConnNum: 200
   redis:
     addr: redis-headless.share:6379
