@@ -21,6 +21,7 @@ func NewDB() *sqlx.DB {
 	fmt.Println("connect to ", mysqlConf.FormatDSN())
 	db := sqlx.MustConnect("mysql", mysqlConf.FormatDSN())
 	db.SetMaxOpenConns(appConf.DataSource.Mysql.MaxOpenConnNum)
+	db.SetMaxIdleConns(appConf.DataSource.Mysql.MaxOpenConnNum)
 	return db
 }
 
