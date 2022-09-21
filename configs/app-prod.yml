@@ -5,7 +5,7 @@ app:
 
 server:
   http:
-    addr: :8080
+    addr: :80
 
 logger:
   default:
