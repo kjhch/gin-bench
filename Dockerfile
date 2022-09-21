@@ -22,7 +22,7 @@ ARG APP_ENV
 ENV APP_ENV=${APP_ENV:-prod}
 ENV GIN_MODE=release
 
-USER admin
+#USER admin
 
 WORKDIR /home/admin
 
