@@ -15,11 +15,12 @@ FROM centos:7
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo "Asia/Shanghai" > /etc/timezone && \
     yum install -y net-tools && \
-    echo "net.ipv4.ip_unprivileged_port_start=0" >> /etc/sysctl.conf && \
     adduser -m admin
 
 ARG APP_ENV
+
 ENV APP_ENV=${APP_ENV:-prod}
+ENV GIN_MODE=release
 
 USER admin
 
@@ -27,6 +28,6 @@ WORKDIR /home/admin
 
 # COPY 源路径 目标路径 从镜像中 COPY
 COPY --from=builder /home/admin/bin/* /bin/
-COPY --from=builder /home/admin/configs/ ./configs
+COPY --from=builder /home/admin/configs/ ./configs/
 
 CMD ["gin-bench"]
