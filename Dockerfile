@@ -15,6 +15,7 @@ FROM centos:7
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo "Asia/Shanghai" > /etc/timezone && \
     yum install -y net-tools && \
+    echo "net.ipv4.ip_unprivileged_port_start=0" >> /etc/sysctl.conf && \
     adduser -m admin
 
 ARG APP_ENV
