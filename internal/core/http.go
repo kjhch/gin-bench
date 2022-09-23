@@ -14,5 +14,10 @@ func NewHttpServer(userApi *api.UserApi) *gin.Engine {
 	})
 	engine.Handle(http.MethodGet, "/user", userApi.GetUser)
 	engine.Handle(http.MethodGet, "/users", userApi.ListUsers)
+	cacheGroup := engine.Group("/cache")
+	{
+		cacheGroup.GET("/user", userApi.GetCacheUser)
+		cacheGroup.GET("/users", userApi.ListCacheUsers)
+	}
 	return engine
 }

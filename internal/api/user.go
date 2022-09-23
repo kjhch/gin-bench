@@ -30,8 +30,19 @@ func (api *UserApi) ListUsers(ctx *gin.Context) {
 	pageNum, _ := strconv.ParseUint(ctx.Query("pageNum"), 10, 32)
 	pageSize, _ := strconv.ParseUint(ctx.Query("pageSize"), 10, 32)
 	ctx.JSON(http.StatusOK, successfulResp(api.userService.ListUsers(uint(pageNum), uint(pageSize))))
-
 }
+
+func (api *UserApi) GetCacheUser(ctx *gin.Context) {
+	id, _ := strconv.ParseUint(ctx.Query("id"), 10, 64)
+	ctx.JSON(http.StatusOK, successfulResp(api.userService.GetCacheUser(id)))
+}
+
+func (api *UserApi) ListCacheUsers(ctx *gin.Context) {
+	pageNum, _ := strconv.ParseUint(ctx.Query("pageNum"), 10, 32)
+	pageSize, _ := strconv.ParseUint(ctx.Query("pageSize"), 10, 32)
+	ctx.JSON(http.StatusOK, successfulResp(api.userService.ListCacheUsers(uint(pageNum), uint(pageSize))))
+}
+
 func successfulResp[T any](data T) *Response[T] {
 	return &Response[T]{
 		Code:    "00000",

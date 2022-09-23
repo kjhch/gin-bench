@@ -2,6 +2,8 @@ package service
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"github.com/go-redis/redis/v8"
 	"github.com/kjhch/gin-bench/internal/repo"
 	"strconv"
@@ -49,6 +51,22 @@ func (svc *UserService) GetUser(id uint64) *User {
 	}
 }
 
+func (svc *UserService) GetCacheUser(id uint64) *User {
+	key := fmt.Sprintf("PT:user:%d", id)
+	bs, err := svc.rdb.Get(context.Background(), key).Bytes()
+	if err == redis.Nil {
+		user := svc.GetUser(id)
+		userbytes, _ := json.Marshal(user)
+		svc.rdb.Set(context.Background(), key, userbytes, 10*time.Minute)
+		return user
+	} else if err != nil {
+		panic(err)
+	}
+	user := new(User)
+	json.Unmarshal(bs, user)
+	return user
+}
+
 func (svc *UserService) ListUsers(pageNum, pageSize uint) *Page[User] {
 	count, err := svc.rdb.Get(context.Background(), "pt:db:count").Uint64()
 	if err != nil {
@@ -91,6 +109,22 @@ func (svc *UserService) ListUsers(pageNum, pageSize uint) *Page[User] {
 		TotalCount: &count,
 		List:       users,
 	}
+}
+
+func (svc *UserService) ListCacheUsers(pageNum, pageSize uint) *Page[User] {
+	key := fmt.Sprintf("PT:users:%d-%d", pageNum, pageSize)
+	bs, err := svc.rdb.Get(context.Background(), key).Bytes()
+	if err == redis.Nil {
+		users := svc.ListUsers(pageNum, pageSize)
+		usersbytes, _ := json.Marshal(users)
+		svc.rdb.Set(context.Background(), key, usersbytes, 10*time.Minute)
+		return users
+	} else if err != nil {
+		panic(err)
+	}
+	var users = new(Page[User])
+	json.Unmarshal(bs, users)
+	return users
 }
 
 func newVal[T any](a T) *T {
